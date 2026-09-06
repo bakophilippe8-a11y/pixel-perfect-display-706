@@ -35,6 +35,7 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [pending, setPending] = useState(false);
 
   useEffect(() => {
     if (user) navigate({ to: "/" });
@@ -43,19 +44,31 @@ function AuthPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
-    const fn =
-      mode === "in"
-        ? supabase.auth.signInWithPassword({ email, password })
-        : supabase.auth.signUp({
-            email,
-            password,
-            options: { emailRedirectTo: window.location.origin },
-          });
-    const { error } = await fn;
+    if (mode === "in") {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      setBusy(false);
+      if (error) toast.error(error.message);
+      else navigate({ to: "/" });
+      return;
+    }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: window.location.origin },
+    });
     setBusy(false);
-    if (error) toast.error(error.message);
-    else navigate({ to: "/" });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (data.session) {
+      navigate({ to: "/" });
+      return;
+    }
+    setPending(true);
+    toast.success(t("checkEmail"));
   };
+
 
   const google = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
