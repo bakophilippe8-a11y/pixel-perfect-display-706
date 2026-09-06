@@ -23,6 +23,14 @@ const dict: Dict = {
   },
   noAccount: { fr: "Pas encore de compte ?", en: "No account yet?" },
   haveAccount: { fr: "Déjà un compte ?", en: "Already have an account?" },
+  checkEmail: {
+    fr: "Compte créé. Ouvrez l'e-mail de confirmation puis revenez vous connecter.",
+    en: "Account created. Open the confirmation email, then come back and sign in.",
+  },
+  passwordHint: {
+    fr: "8 caractères minimum, évitez un mot de passe courant.",
+    en: "At least 8 characters, avoid common passwords.",
+  },
 
   heroTitle: { fr: "Le cerveau de vos agents de vente", en: "The brain of your sales agents" },
   heroSub: {
