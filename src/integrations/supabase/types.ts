@@ -14,7 +14,145 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      lead_events: {
+        Row: {
+          agent: Database["public"]["Enums"]["agent_kind"]
+          contenu: string
+          created_at: string
+          id: string
+          lead_id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          agent?: Database["public"]["Enums"]["agent_kind"]
+          contenu?: string
+          created_at?: string
+          id?: string
+          lead_id: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          agent?: Database["public"]["Enums"]["agent_kind"]
+          contenu?: string
+          created_at?: string
+          id?: string
+          lead_id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          created_at: string
+          id: string
+          last_activity_at: string
+          next_followup_at: string | null
+          nom: string
+          notes: string
+          product_id: string | null
+          score_confiance: number | null
+          source: string
+          stage: Database["public"]["Enums"]["lead_stage"]
+          telephone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_activity_at?: string
+          next_followup_at?: string | null
+          nom: string
+          notes?: string
+          product_id?: string | null
+          score_confiance?: number | null
+          source?: string
+          stage?: Database["public"]["Enums"]["lead_stage"]
+          telephone?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_activity_at?: string
+          next_followup_at?: string | null
+          nom?: string
+          notes?: string
+          product_id?: string | null
+          score_confiance?: number | null
+          source?: string
+          stage?: Database["public"]["Enums"]["lead_stage"]
+          telephone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          argument_cle: string
+          code: string
+          created_at: string
+          devise: string
+          id: string
+          lien_maketou: string
+          mots_cles_interet: string[]
+          nom: string
+          prix: number
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          argument_cle?: string
+          code: string
+          created_at?: string
+          devise?: string
+          id?: string
+          lien_maketou?: string
+          mots_cles_interet?: string[]
+          nom: string
+          prix?: number
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          argument_cle?: string
+          code?: string
+          created_at?: string
+          devise?: string
+          id?: string
+          lien_maketou?: string
+          mots_cles_interet?: string[]
+          nom?: string
+          prix?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +161,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      agent_kind: "segmentation" | "matching" | "closing" | "suivi" | "manuel"
+      lead_stage:
+        | "nouveau"
+        | "contacte"
+        | "repondu"
+        | "a_qualifier"
+        | "matche"
+        | "en_negociation"
+        | "paye"
+        | "perdu"
+        | "dormant"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +298,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      agent_kind: ["segmentation", "matching", "closing", "suivi", "manuel"],
+      lead_stage: [
+        "nouveau",
+        "contacte",
+        "repondu",
+        "a_qualifier",
+        "matche",
+        "en_negociation",
+        "paye",
+        "perdu",
+        "dormant",
+      ],
+    },
   },
 } as const
