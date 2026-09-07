@@ -33,6 +33,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/", label: t("navOverview") },
     { to: "/catalogue", label: t("navCatalog") },
     { to: "/leads", label: t("navLeads") },
+    { to: "/statistiques", label: t("navStats") },
   ] as const;
 
   return (
