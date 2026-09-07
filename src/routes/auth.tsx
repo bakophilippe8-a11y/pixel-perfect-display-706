@@ -35,7 +35,6 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  const [pending, setPending] = useState(false);
 
   useEffect(() => {
     if (user) navigate({ to: "/" });
@@ -65,8 +64,8 @@ function AuthPage() {
       navigate({ to: "/" });
       return;
     }
-    setPending(true);
-    toast.success(t("checkEmail"));
+    toast.success(t("saved"));
+    navigate({ to: "/" });
   };
 
 
