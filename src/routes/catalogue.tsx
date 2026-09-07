@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { SAMPLE_PRODUCTS, fetchProducts, type Product } from "@/lib/data";
+import { fetchProducts, type Product } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/useAuth";
 import { RequireAuth } from "@/components/RequireAuth";
@@ -116,17 +116,6 @@ function CataloguePage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const seed = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase
-        .from("products")
-        .insert(SAMPLE_PRODUCTS.map((p) => ({ ...p, user_id: user!.id })));
-      if (error) throw error;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["products"] }),
-    onError: (e: Error) => toast.error(e.message),
-  });
-
   const toDraft = (p: Product): Draft => ({
     id: p.id,
     code: p.code,
@@ -155,8 +144,8 @@ function CataloguePage() {
       {list.length === 0 ? (
         <div className="panel p-10 text-center">
           <p className="text-sm text-muted-foreground">{t("noProducts")}</p>
-          <Button className="mt-4" variant="secondary" onClick={() => seed.mutate()}>
-            {t("loadSamples")}
+          <Button className="mt-4" onClick={() => setDraft({ ...emptyDraft })}>
+            {t("addProduct")}
           </Button>
         </div>
       ) : (

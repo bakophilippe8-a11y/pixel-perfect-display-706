@@ -77,36 +77,3 @@ export async function fetchEvents(limit = 50): Promise<LeadEvent[]> {
   if (error) throw error;
   return (data ?? []) as LeadEvent[];
 }
-
-export const SAMPLE_PRODUCTS = [
-  {
-    code: "forex",
-    nom: "Formation Forex",
-    mots_cles_interet: ["investir", "trading", "forex", "bourse", "argent"],
-    argument_cle: "Apprendre à lire le marché et placer ses premiers trades en 30 jours.",
-    prix: 50000,
-    devise: "XOF",
-    lien_maketou: "https://maketou.com/forex",
-    statut: "actif",
-  },
-  {
-    code: "alibaba",
-    nom: "Sourcing Alibaba",
-    mots_cles_interet: ["import", "alibaba", "commerce", "boutique", "fournisseur"],
-    argument_cle: "Trouver un fournisseur fiable et importer sans se faire arnaquer.",
-    prix: 35000,
-    devise: "XOF",
-    lien_maketou: "https://maketou.com/alibaba",
-    statut: "actif",
-  },
-  {
-    code: "tiktok",
-    nom: "Monétisation TikTok",
-    mots_cles_interet: ["tiktok", "contenu", "vidéo", "créateur", "monétisation"],
-    argument_cle: "Transformer une audience TikTok en revenus réguliers.",
-    prix: 25000,
-    devise: "XOF",
-    lien_maketou: "https://maketou.com/tiktok",
-    statut: "actif",
-  },
-];
