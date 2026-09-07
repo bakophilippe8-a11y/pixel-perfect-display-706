@@ -68,6 +68,40 @@ export async function fetchLeads(): Promise<Lead[]> {
   return (data ?? []) as Lead[];
 }
 
+/**
+ * Insère en masse des leads importés (contacts téléphone), en ignorant ceux
+ * dont le numéro existe déjà pour cet utilisateur. Envoi par lots de 500
+ * pour rester dans les limites raisonnables d'une requête Supabase.
+ */
+export async function bulkInsertLeads(
+  userId: string,
+  contacts: { nom: string; telephone: string }[],
+): Promise<{ inserted: number; skipped: number }> {
+  const { data: existing, error: fetchError } = await supabase
+    .from("leads")
+    .select("telephone")
+    .eq("user_id", userId);
+  if (fetchError) throw fetchError;
+
+  const existingPhones = new Set((existing ?? []).map((l) => l.telephone));
+  const toInsert = contacts.filter((c) => !existingPhones.has(c.telephone));
+  const skipped = contacts.length - toInsert.length;
+
+  const CHUNK = 500;
+  for (let i = 0; i < toInsert.length; i += CHUNK) {
+    const chunk = toInsert.slice(i, i + CHUNK).map((c) => ({
+      user_id: userId,
+      nom: c.nom,
+      telephone: c.telephone,
+      source: "whatsapp",
+    }));
+    const { error } = await supabase.from("leads").insert(chunk);
+    if (error) throw error;
+  }
+
+  return { inserted: toInsert.length, skipped };
+}
+
 export async function fetchEvents(limit = 50): Promise<LeadEvent[]> {
   const { data, error } = await supabase
     .from("lead_events")
