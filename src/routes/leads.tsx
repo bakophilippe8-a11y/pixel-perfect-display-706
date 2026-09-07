@@ -3,7 +3,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { STAGES, fetchLeads, fetchProducts, type Lead, type Stage } from "@/lib/data";
+import {
+  STAGES,
+  bulkInsertLeads,
+  fetchLeads,
+  fetchProducts,
+  type Lead,
+  type Stage,
+} from "@/lib/data";
+import { parseContactsFile, type ImportedContact } from "@/lib/contacts-import";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/useAuth";
 import { RequireAuth } from "@/components/RequireAuth";
@@ -66,6 +74,9 @@ function LeadsPage() {
   const [creating, setCreating] = useState(false);
   const [newLead, setNewLead] = useState({ nom: "", telephone: "" });
   const [note, setNote] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importedContacts, setImportedContacts] = useState<ImportedContact[]>([]);
+  const [importFileName, setImportFileName] = useState("");
 
   const leads = useQuery({ queryKey: ["leads"], queryFn: fetchLeads, enabled: !!user });
   const products = useQuery({ queryKey: ["products"], queryFn: fetchProducts, enabled: !!user });
@@ -101,6 +112,29 @@ function LeadsPage() {
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const importContacts = useMutation({
+    mutationFn: () => bulkInsertLeads(user!.id, importedContacts),
+    onSuccess: ({ inserted, skipped }) => {
+      toast.success(
+        t("importSuccess")
+          .replace("{inserted}", String(inserted))
+          .replace("{skipped}", String(skipped)),
+      );
+      setImporting(false);
+      setImportedContacts([]);
+      setImportFileName("");
+      qc.invalidateQueries({ queryKey: ["leads"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const handleImportFile = async (file: File) => {
+    const content = await file.text();
+    const contacts = parseContactsFile(file.name, content);
+    setImportFileName(file.name);
+    setImportedContacts(contacts);
+  };
 
   const updateLead = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Record<string, unknown> }) => {
@@ -170,7 +204,12 @@ function LeadsPage() {
           <h1 className="mt-1 text-3xl font-semibold">{t("leadsTitle")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("leadsSub")}</p>
         </div>
-        <Button onClick={() => setCreating(true)}>{t("addLead")}</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setImporting(true)}>
+            {t("importContacts")}
+          </Button>
+          <Button onClick={() => setCreating(true)}>{t("addLead")}</Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -223,13 +262,17 @@ function LeadsPage() {
                     </span>
                   </td>
                   <td className="p-4">
-                    <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${stageTone[l.stage]}`}>
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-medium ${stageTone[l.stage]}`}
+                    >
                       {t(`stage_${l.stage}`)}
                     </span>
                   </td>
                   <td className="p-4 text-muted-foreground">{productName(l.product_id)}</td>
                   <td className="p-4 font-mono text-xs">
-                    {l.score_confiance != null ? `${Math.round(Number(l.score_confiance) * 100)} %` : "—"}
+                    {l.score_confiance != null
+                      ? `${Math.round(Number(l.score_confiance) * 100)} %`
+                      : "—"}
                   </td>
                   <td className="p-4 text-xs text-muted-foreground">{fmt(l.last_activity_at)}</td>
                 </tr>
@@ -274,6 +317,75 @@ function LeadsPage() {
               <Button type="submit">{t("save")}</Button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Import contacts */}
+      <Dialog
+        open={importing}
+        onOpenChange={(o) => {
+          setImporting(o);
+          if (!o) {
+            setImportedContacts([]);
+            setImportFileName("");
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("importContactsTitle")}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">{t("importContactsHint")}</p>
+
+            <div className="space-y-1.5">
+              <Label>{t("importFileLabel")}</Label>
+              <Input
+                type="file"
+                accept=".vcf,.csv,text/vcard,text/csv"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImportFile(file);
+                }}
+              />
+            </div>
+
+            {importFileName && (
+              <p className="text-sm">
+                {importedContacts.length > 0
+                  ? t("importPreviewCount").replace("{count}", String(importedContacts.length))
+                  : t("importNoneFound")}
+              </p>
+            )}
+
+            {importedContacts.length > 0 && (
+              <ul className="max-h-48 space-y-1 overflow-y-auto rounded-lg border border-border bg-surface-2 p-2 text-xs">
+                {importedContacts.slice(0, 50).map((c, i) => (
+                  <li key={i} className="flex justify-between gap-3 px-2 py-1">
+                    <span className="truncate">{c.nom}</span>
+                    <span className="font-mono text-muted-foreground">{c.telephone}</span>
+                  </li>
+                ))}
+                {importedContacts.length > 50 && (
+                  <li className="px-2 py-1 text-muted-foreground">
+                    … {importedContacts.length - 50} {t("importContacts").toLowerCase()}
+                  </li>
+                )}
+              </ul>
+            )}
+
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="ghost" onClick={() => setImporting(false)}>
+                {t("cancel")}
+              </Button>
+              <Button
+                disabled={importedContacts.length === 0 || importContacts.isPending}
+                onClick={() => importContacts.mutate()}
+              >
+                {importContacts.isPending ? t("importing") : t("importConfirm")}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
