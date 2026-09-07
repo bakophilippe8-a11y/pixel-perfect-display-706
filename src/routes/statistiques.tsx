@@ -96,7 +96,7 @@ function ChartCard({
 }
 
 const axis = {
-  stroke: "hsl(var(--muted-foreground))",
+  stroke: "var(--muted-foreground)",
   fontSize: 11,
   tickLine: false,
   axisLine: false,
@@ -105,14 +105,14 @@ const axis = {
 function tooltipStyle() {
   return {
     contentStyle: {
-      background: "hsl(var(--popover))",
-      border: "1px solid hsl(var(--border))",
+      background: "var(--popover)",
+      border: "1px solid var(--border)",
       borderRadius: 10,
       fontSize: 12,
-      color: "hsl(var(--popover-foreground))",
+      color: "var(--popover-foreground)",
     },
-    labelStyle: { color: "hsl(var(--muted-foreground))" },
-    cursor: { fill: "hsl(var(--muted) / 0.25)" },
+    labelStyle: { color: "var(--muted-foreground)" },
+    cursor: { fill: "color-mix(in oklab, var(--muted) 45%, transparent)" },
   } as const;
 }
 
@@ -253,11 +253,11 @@ function Stats() {
         <AreaChart data={series} margin={{ left: 4, right: 8, top: 8, bottom: 0 }}>
           <defs>
             <linearGradient id="ca" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.5} />
-              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.02} />
+              <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.5} />
+              <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0.02} />
             </linearGradient>
           </defs>
-          <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
+          <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="label" {...axis} />
           <YAxis {...axis} width={54} />
           <Tooltip {...tooltipStyle()} />
@@ -265,7 +265,7 @@ function Stats() {
             type="monotone"
             dataKey="ca"
             name={t("revenue")}
-            stroke="hsl(var(--primary))"
+            stroke="var(--chart-1)"
             strokeWidth={2}
             fill="url(#ca)"
           />
@@ -275,7 +275,7 @@ function Stats() {
       <div className="grid gap-4 lg:grid-cols-2">
         <ChartCard title={t("statsCumulative")}>
           <LineChart data={series} margin={{ left: 4, right: 8, top: 8, bottom: 0 }}>
-            <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="label" {...axis} />
             <YAxis {...axis} width={54} />
             <Tooltip {...tooltipStyle()} />
@@ -283,7 +283,7 @@ function Stats() {
               type="monotone"
               dataKey="cumul"
               name={t("statsCumulative")}
-              stroke="hsl(var(--accent))"
+              stroke="var(--chart-2)"
               strokeWidth={2}
               dot={false}
             />
@@ -292,12 +292,12 @@ function Stats() {
 
         <ChartCard title={t("statsLeadsVsSales")}>
           <BarChart data={series} margin={{ left: 4, right: 8, top: 8, bottom: 0 }}>
-            <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="label" {...axis} />
             <YAxis {...axis} width={32} allowDecimals={false} />
             <Tooltip {...tooltipStyle()} />
-            <Bar dataKey="leads" name={t("statsNewLeads")} fill="hsl(var(--muted-foreground))" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="ventes" name={t("statsSalesCount")} fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="leads" name={t("statsNewLeads")} fill="var(--muted-foreground)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="ventes" name={t("statsSalesCount")} fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ChartCard>
 
@@ -307,21 +307,21 @@ function Stats() {
             layout="vertical"
             margin={{ left: 8, right: 12, top: 8, bottom: 0 }}
           >
-            <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" horizontal={false} />
+            <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" horizontal={false} />
             <XAxis type="number" {...axis} />
             <YAxis type="category" dataKey="nom" width={110} {...axis} />
             <Tooltip {...tooltipStyle()} />
-            <Bar dataKey="ca" name={t("revenue")} fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+            <Bar dataKey="ca" name={t("revenue")} fill="var(--chart-1)" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ChartCard>
 
         <ChartCard title={t("statsFunnel")}>
           <BarChart data={funnel} margin={{ left: 4, right: 8, top: 8, bottom: 0 }}>
-            <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="stage" {...axis} interval={0} angle={-25} textAnchor="end" height={54} />
             <YAxis {...axis} width={32} allowDecimals={false} />
             <Tooltip {...tooltipStyle()} />
-            <Bar dataKey="count" name={t("totalLeads")} fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="count" name={t("totalLeads")} fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ChartCard>
       </div>
