@@ -110,6 +110,27 @@ const dict: Dict = {
     en: "Every contact, its stage, matched product and history.",
   },
   addLead: { fr: "Nouveau lead", en: "New lead" },
+  importContacts: { fr: "Importer des contacts", en: "Import contacts" },
+  importContactsTitle: { fr: "Importer des contacts", en: "Import contacts" },
+  importContactsHint: {
+    fr: "Exportez vos contacts depuis votre téléphone (Google Contacts : Menu > Exporter > format vCard ou CSV) puis sélectionnez le fichier ci-dessous. Formats acceptés : .vcf, .csv.",
+    en: "Export your contacts from your phone (Google Contacts: Menu > Export > vCard or CSV format), then select the file below. Accepted formats: .vcf, .csv.",
+  },
+  importFileLabel: { fr: "Fichier de contacts", en: "Contacts file" },
+  importPreviewCount: {
+    fr: "{count} numéro(s) détecté(s) dans le fichier.",
+    en: "{count} number(s) detected in the file.",
+  },
+  importNoneFound: {
+    fr: "Aucun numéro exploitable n'a été trouvé dans ce fichier.",
+    en: "No usable number was found in this file.",
+  },
+  importConfirm: { fr: "Importer", en: "Import" },
+  importing: { fr: "Import en cours…", en: "Importing…" },
+  importSuccess: {
+    fr: "{inserted} lead(s) importé(s), {skipped} déjà existant(s) ignoré(s).",
+    en: "{inserted} lead(s) imported, {skipped} already existing skipped.",
+  },
   contact: { fr: "Contact", en: "Contact" },
   phone: { fr: "Téléphone", en: "Phone" },
   stage: { fr: "Étape", en: "Stage" },
