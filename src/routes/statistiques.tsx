@@ -224,7 +224,7 @@ function Stats() {
             <button
               key={r.key}
               onClick={() => setRange(r.key)}
-              className={`rounded-full px-3 py-1.5 transition-colors ${
+              className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 transition-colors ${
                 range === r.key
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
