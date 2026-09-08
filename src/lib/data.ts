@@ -70,7 +70,7 @@ export async function fetchLeads(): Promise<Lead[]> {
 
 /**
  * Insère en masse des leads importés (contacts téléphone), en ignorant ceux
- * dont le numéro existe déjà pour cet utilisateur. Envoi par lots de 500
+ * dont le numéro existe déjà pour cet utilisateur. Envoi par lots de 2000
  * pour rester dans les limites raisonnables d'une requête Supabase.
  */
 export async function bulkInsertLeads(
@@ -87,7 +87,7 @@ export async function bulkInsertLeads(
   const toInsert = contacts.filter((c) => !existingPhones.has(c.telephone));
   const skipped = contacts.length - toInsert.length;
 
-  const CHUNK = 500;
+  const CHUNK = 2000;
   for (let i = 0; i < toInsert.length; i += CHUNK) {
     const chunk = toInsert.slice(i, i + CHUNK).map((c) => ({
       user_id: userId,
