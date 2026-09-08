@@ -242,11 +242,11 @@ function LeadsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border text-left">
-                <th className="label-eyebrow p-4">{t("contact")}</th>
-                <th className="label-eyebrow p-4">{t("stage")}</th>
-                <th className="label-eyebrow p-4">{t("product")}</th>
-                <th className="label-eyebrow p-4">{t("confidence")}</th>
-                <th className="label-eyebrow p-4">{t("lastActivity")}</th>
+                <th className="label-eyebrow p-3 sm:p-4">{t("contact")}</th>
+                <th className="label-eyebrow p-3 sm:p-4">{t("stage")}</th>
+                <th className="label-eyebrow hidden p-4 md:table-cell">{t("product")}</th>
+                <th className="label-eyebrow hidden p-4 lg:table-cell">{t("confidence")}</th>
+                <th className="label-eyebrow hidden p-4 sm:table-cell">{t("lastActivity")}</th>
               </tr>
             </thead>
             <tbody>
@@ -256,30 +256,31 @@ function LeadsPage() {
                   onClick={() => setOpenLead(l)}
                   className="cursor-pointer border-b border-border/60 transition-colors last:border-0 hover:bg-surface-2"
                 >
-                  <td className="p-4">
+                  <td className="p-3 sm:p-4">
                     <span className="font-medium">{l.nom}</span>
                     <span className="block font-mono text-xs text-muted-foreground">
                       {l.telephone}
                     </span>
                   </td>
-                  <td className="p-4">
+                  <td className="p-3 sm:p-4">
                     <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-medium ${stageTone[l.stage]}`}
+                      className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${stageTone[l.stage]}`}
                     >
                       {t(`stage_${l.stage}`)}
                     </span>
                   </td>
-                  <td className="p-4 text-muted-foreground">{productName(l.product_id)}</td>
-                  <td className="p-4 font-mono text-xs">
+                  <td className="hidden p-4 text-muted-foreground md:table-cell">{productName(l.product_id)}</td>
+                  <td className="hidden p-4 font-mono text-xs lg:table-cell">
                     {l.score_confiance != null
                       ? `${Math.round(Number(l.score_confiance) * 100)} %`
                       : "—"}
                   </td>
-                  <td className="p-4 text-xs text-muted-foreground">{fmt(l.last_activity_at)}</td>
+                  <td className="hidden p-4 text-xs text-muted-foreground sm:table-cell">{fmt(l.last_activity_at)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+
         )}
       </div>
 
