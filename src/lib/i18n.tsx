@@ -6,7 +6,7 @@ type Dict = Record<string, { fr: string; en: string }>;
 
 const dict: Dict = {
   brand: { fr: "Agents IA — Prospection", en: "AI Agents — Prospecting" },
-  brandSub: { fr: "Bladers × Maketou", en: "Bladers × Maketou" },
+  brandSub: { fr: "", en: "" },
   navOverview: { fr: "Vue d'ensemble", en: "Overview" },
   navCatalog: { fr: "Catalogue", en: "Catalog" },
   navLeads: { fr: "Leads", en: "Leads" },
