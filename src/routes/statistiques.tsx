@@ -213,12 +213,13 @@ function Stats() {
 
   return (
     <div className="space-y-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <header className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="min-w-0">
           <h1 className="font-display text-2xl font-semibold">{t("statsTitle")}</h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{t("statsSub")}</p>
         </div>
-        <div className="flex items-center rounded-full border border-border bg-surface-2 p-0.5 text-xs font-medium">
+        <div className="flex items-center self-start overflow-x-auto rounded-full border border-border bg-surface-2 p-0.5 text-xs font-medium">
+
           {ranges.map((r) => (
             <button
               key={r.key}
