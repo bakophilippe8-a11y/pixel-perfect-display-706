@@ -132,14 +132,15 @@ function CataloguePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="min-w-0">
           <p className="label-eyebrow">{t("navCatalog")}</p>
-          <h1 className="mt-1 text-3xl font-semibold">{t("catalogTitle")}</h1>
+          <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">{t("catalogTitle")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("catalogSub")}</p>
         </div>
-        <Button onClick={() => setDraft({ ...emptyDraft })}>{t("addProduct")}</Button>
+        <Button className="w-full sm:w-auto" onClick={() => setDraft({ ...emptyDraft })}>{t("addProduct")}</Button>
       </div>
+
 
       {list.length === 0 ? (
         <div className="panel p-10 text-center">

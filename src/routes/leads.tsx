@@ -198,29 +198,29 @@ function LeadsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="min-w-0">
           <p className="label-eyebrow">{t("navLeads")}</p>
-          <h1 className="mt-1 text-3xl font-semibold">{t("leadsTitle")}</h1>
+          <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">{t("leadsTitle")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("leadsSub")}</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setImporting(true)}>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" className="flex-1 sm:flex-none" onClick={() => setImporting(true)}>
             {t("importContacts")}
           </Button>
-          <Button onClick={() => setCreating(true)}>{t("addLead")}</Button>
+          <Button className="flex-1 sm:flex-none" onClick={() => setCreating(true)}>{t("addLead")}</Button>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <Input
-          className="max-w-xs"
+          className="w-full sm:max-w-xs"
           placeholder={t("search")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-56">
+          <SelectTrigger className="w-full sm:w-56">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -234,6 +234,7 @@ function LeadsPage() {
         </Select>
       </div>
 
+
       <div className="panel overflow-x-auto">
         {rows.length === 0 ? (
           <p className="p-10 text-center text-sm text-muted-foreground">{t("noLeads")}</p>
@@ -241,11 +242,11 @@ function LeadsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border text-left">
-                <th className="label-eyebrow p-4">{t("contact")}</th>
-                <th className="label-eyebrow p-4">{t("stage")}</th>
-                <th className="label-eyebrow p-4">{t("product")}</th>
-                <th className="label-eyebrow p-4">{t("confidence")}</th>
-                <th className="label-eyebrow p-4">{t("lastActivity")}</th>
+                <th className="label-eyebrow p-3 sm:p-4">{t("contact")}</th>
+                <th className="label-eyebrow p-3 sm:p-4">{t("stage")}</th>
+                <th className="label-eyebrow hidden p-4 md:table-cell">{t("product")}</th>
+                <th className="label-eyebrow hidden p-4 lg:table-cell">{t("confidence")}</th>
+                <th className="label-eyebrow hidden p-4 sm:table-cell">{t("lastActivity")}</th>
               </tr>
             </thead>
             <tbody>
@@ -255,30 +256,31 @@ function LeadsPage() {
                   onClick={() => setOpenLead(l)}
                   className="cursor-pointer border-b border-border/60 transition-colors last:border-0 hover:bg-surface-2"
                 >
-                  <td className="p-4">
+                  <td className="p-3 sm:p-4">
                     <span className="font-medium">{l.nom}</span>
                     <span className="block font-mono text-xs text-muted-foreground">
                       {l.telephone}
                     </span>
                   </td>
-                  <td className="p-4">
+                  <td className="p-3 sm:p-4">
                     <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-medium ${stageTone[l.stage]}`}
+                      className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${stageTone[l.stage]}`}
                     >
                       {t(`stage_${l.stage}`)}
                     </span>
                   </td>
-                  <td className="p-4 text-muted-foreground">{productName(l.product_id)}</td>
-                  <td className="p-4 font-mono text-xs">
+                  <td className="hidden p-4 text-muted-foreground md:table-cell">{productName(l.product_id)}</td>
+                  <td className="hidden p-4 font-mono text-xs lg:table-cell">
                     {l.score_confiance != null
                       ? `${Math.round(Number(l.score_confiance) * 100)} %`
                       : "—"}
                   </td>
-                  <td className="p-4 text-xs text-muted-foreground">{fmt(l.last_activity_at)}</td>
+                  <td className="hidden p-4 text-xs text-muted-foreground sm:table-cell">{fmt(l.last_activity_at)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+
         )}
       </div>
 

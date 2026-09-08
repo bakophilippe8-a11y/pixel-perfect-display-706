@@ -39,38 +39,24 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-5 py-3">
-          <Link to="/" className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-md bg-primary font-display text-sm font-bold text-primary-foreground">
+        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3 sm:flex sm:flex-wrap sm:gap-4 sm:px-5">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary font-display text-sm font-bold text-primary-foreground">
               AI
             </span>
-            <span className="leading-tight">
-              <span className="block font-display text-sm font-semibold">{t("brand")}</span>
-              <span className="label-eyebrow">{t("brandSub")}</span>
+            <span className="min-w-0 leading-tight">
+              <span className="block truncate font-display text-sm font-semibold">{t("brand")}</span>
+              <span className="label-eyebrow block truncate">{t("brandSub")}</span>
             </span>
           </Link>
 
-          <nav className="order-3 flex w-full gap-1 sm:order-none sm:w-auto">
-            {nav.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                activeOptions={{ exact: item.to === "/" }}
-                activeProps={{ className: "bg-surface-2 text-foreground" }}
-                inactiveProps={{ className: "text-muted-foreground hover:text-foreground" }}
-                className="rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="ml-auto flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:order-3 sm:ml-auto sm:gap-3">
             <LangToggle />
             {user ? (
               <Button
                 variant="ghost"
                 size="sm"
+                className="px-2 sm:px-3"
                 onClick={async () => {
                   await supabase.auth.signOut();
                   navigate({ to: "/auth" });
@@ -80,9 +66,25 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Button>
             ) : null}
           </div>
+
+          <nav className="col-span-2 -mx-1 flex gap-1 overflow-x-auto px-1 pb-0.5 sm:order-2 sm:col-span-1 sm:mx-0 sm:overflow-visible sm:px-0">
+            {nav.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                activeOptions={{ exact: item.to === "/" }}
+                activeProps={{ className: "bg-surface-2 text-foreground" }}
+                inactiveProps={{ className: "text-muted-foreground hover:text-foreground" }}
+                className="shrink-0 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-5 py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-5 sm:py-8">{children}</main>
+
     </div>
   );
 }
