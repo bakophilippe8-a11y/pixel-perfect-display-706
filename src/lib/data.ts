@@ -70,7 +70,7 @@ export async function fetchLeads(): Promise<Lead[]> {
 
 /**
  * Insère en masse des leads importés (contacts téléphone), en ignorant ceux
- * dont le numéro existe déjà pour cet utilisateur. Envoi par lots de 500
+ * dont le numéro existe déjà pour cet utilisateur. Envoi par lots de 2000
  * pour rester dans les limites raisonnables d'une requête Supabase.
  */
 export async function bulkInsertLeads(
