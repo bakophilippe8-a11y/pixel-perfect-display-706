@@ -198,29 +198,29 @@ function LeadsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="min-w-0">
           <p className="label-eyebrow">{t("navLeads")}</p>
-          <h1 className="mt-1 text-3xl font-semibold">{t("leadsTitle")}</h1>
+          <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">{t("leadsTitle")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("leadsSub")}</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setImporting(true)}>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" className="flex-1 sm:flex-none" onClick={() => setImporting(true)}>
             {t("importContacts")}
           </Button>
-          <Button onClick={() => setCreating(true)}>{t("addLead")}</Button>
+          <Button className="flex-1 sm:flex-none" onClick={() => setCreating(true)}>{t("addLead")}</Button>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <Input
-          className="max-w-xs"
+          className="w-full sm:max-w-xs"
           placeholder={t("search")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-56">
+          <SelectTrigger className="w-full sm:w-56">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -233,6 +233,7 @@ function LeadsPage() {
           </SelectContent>
         </Select>
       </div>
+
 
       <div className="panel overflow-x-auto">
         {rows.length === 0 ? (
