@@ -37,6 +37,7 @@ const dict: Dict = {
   range90: { fr: "90 jours", en: "90 days" },
   range365: { fr: "12 mois", en: "12 months" },
   signOut: { fr: "Se déconnecter", en: "Sign out" },
+  installApp: { fr: "Installer l'appli", en: "Install app" },
   signIn: { fr: "Se connecter", en: "Sign in" },
   signUp: { fr: "Créer un compte", en: "Create account" },
   email: { fr: "Adresse e-mail", en: "Email address" },
