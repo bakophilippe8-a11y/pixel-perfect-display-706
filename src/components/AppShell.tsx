@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/useAuth";
 import { Button } from "@/components/ui/button";
+import { InstallAppButton } from "@/components/InstallAppButton";
 
 function LangToggle() {
   const { lang, setLang } = useI18n();
@@ -51,6 +52,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
 
           <div className="flex items-center gap-2 sm:order-3 sm:ml-auto sm:gap-3">
+            <InstallAppButton />
             <LangToggle />
             {user ? (
               <Button
