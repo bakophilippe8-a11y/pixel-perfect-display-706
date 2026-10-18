@@ -31,6 +31,8 @@ export const Route = createFileRoute("/catalogue")({
           "Ajoutez ou modifiez vos offres : mots-clés d'intérêt, argument clé, prix et lien de paiement.",
       },
       { property: "og:title", content: "Catalogue produit — Agents IA Maketou" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Le référentiel qui pilote les agents de matching et de closing, sans code.",

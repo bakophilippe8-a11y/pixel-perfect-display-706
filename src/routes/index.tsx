@@ -16,6 +16,8 @@ export const Route = createFileRoute("/")({
           "Vue d'ensemble du pipeline : leads suivis, taux de réponse, conversion par étape et relances à faire.",
       },
       { property: "og:title", content: "Tableau de bord — Agents IA de prospection Maketou" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Leads suivis, taux de réponse, conversion par étape et relances à faire.",

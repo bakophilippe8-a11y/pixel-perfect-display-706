@@ -39,6 +39,8 @@ export const Route = createFileRoute("/leads")({
           "Chaque contact WhatsApp, son étape dans le pipeline, le produit associé et son historique.",
       },
       { property: "og:title", content: "Suivi des leads — Agents IA Maketou" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Pipeline de prospection : étapes, produit matché, relances et historique.",

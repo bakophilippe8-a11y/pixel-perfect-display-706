@@ -18,6 +18,8 @@ export const Route = createFileRoute("/auth")({
         content: "Connectez-vous pour piloter le catalogue produit et le pipeline de prospection.",
       },
       { property: "og:title", content: "Connexion — Agents IA Bladers × Maketou" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Accès au tableau de bord de prospection et de vente Maketou.",
