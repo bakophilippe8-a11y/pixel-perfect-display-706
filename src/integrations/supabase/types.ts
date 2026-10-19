@@ -153,12 +153,253 @@ export type Database = {
         }
         Relationships: []
       }
+      sales_campaigns: {
+        Row: {
+          approved_at: string | null
+          created_at: string
+          facebook_copy: string
+          id: string
+          status: string
+          title: string
+          user_id: string
+          voiceover_script: string
+        }
+        Insert: {
+          approved_at?: string | null
+          created_at?: string
+          facebook_copy?: string
+          id?: string
+          status?: string
+          title: string
+          user_id: string
+          voiceover_script?: string
+        }
+        Update: {
+          approved_at?: string | null
+          created_at?: string
+          facebook_copy?: string
+          id?: string
+          status?: string
+          title?: string
+          user_id?: string
+          voiceover_script?: string
+        }
+        Relationships: []
+      }
+      sales_conversations: {
+        Row: {
+          channel: string
+          contact_name: string
+          contact_status: string
+          created_at: string
+          external_contact: string
+          id: string
+          last_inbound_at: string | null
+          opted_out: boolean
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          channel: string
+          contact_name?: string
+          contact_status?: string
+          created_at?: string
+          external_contact?: string
+          id?: string
+          last_inbound_at?: string | null
+          opted_out?: boolean
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          contact_name?: string
+          contact_status?: string
+          created_at?: string
+          external_contact?: string
+          id?: string
+          last_inbound_at?: string | null
+          opted_out?: boolean
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sales_guidelines: {
+        Row: {
+          ai_paused: boolean
+          human_conditions: string
+          pause_reason: string
+          sales_info: string
+          tone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_paused?: boolean
+          human_conditions?: string
+          pause_reason?: string
+          sales_info?: string
+          tone?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_paused?: boolean
+          human_conditions?: string
+          pause_reason?: string
+          sales_info?: string
+          tone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sales_inbox: {
+        Row: {
+          connection_id: string
+          created_at: string
+          delivery_id: string
+          error: string | null
+          id: string
+          payload: Json
+          state: string
+          user_id: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string
+          delivery_id: string
+          error?: string | null
+          id?: string
+          payload: Json
+          state?: string
+          user_id: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string
+          delivery_id?: string
+          error?: string | null
+          id?: string
+          payload?: Json
+          state?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_inbox_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "seller_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          decision: Json | null
+          direction: string
+          error: string | null
+          id: string
+          provider_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          decision?: Json | null
+          direction: string
+          error?: string | null
+          id?: string
+          provider_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          decision?: Json | null
+          direction?: string
+          error?: string | null
+          id?: string
+          provider_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "sales_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_processing_locks: {
+        Row: {
+          expires_at: string
+          user_id: string
+        }
+        Insert: {
+          expires_at: string
+          user_id: string
+        }
+        Update: {
+          expires_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      seller_connections: {
+        Row: {
+          channel: string
+          created_at: string
+          credentials_ciphertext: string
+          enabled: boolean
+          id: string
+          test_error: string | null
+          tested_at: string | null
+          user_id: string
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          credentials_ciphertext: string
+          enabled?: boolean
+          id?: string
+          test_error?: string | null
+          tested_at?: string | null
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          credentials_ciphertext?: string
+          enabled?: boolean
+          id?: string
+          test_error?: string | null
+          tested_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_sales_lock: { Args: { owner_id: string }; Returns: boolean }
     }
     Enums: {
       agent_kind: "segmentation" | "matching" | "closing" | "suivi" | "manuel"

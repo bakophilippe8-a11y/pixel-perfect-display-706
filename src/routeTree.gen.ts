@@ -10,14 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as LeadsRouteImport } from './routes/leads'
 import { Route as StatistiquesRouteImport } from './routes/statistiques'
+import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
+import { Route as ApiSalesDecisionRouteImport } from './routes/api/sales/decision'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -40,6 +47,16 @@ const StatistiquesRoute = StatistiquesRouteImport.update({
   path: '/statistiques',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiSalesDecisionRoute = ApiSalesDecisionRouteImport.update({
+  id: '/api/sales/decision',
+  path: '/api/sales/decision',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +64,8 @@ export interface FileRoutesByFullPath {
   '/catalogue': typeof CatalogueRoute
   '/leads': typeof LeadsRoute
   '/statistiques': typeof StatistiquesRoute
+  '/parametres': typeof AuthenticatedParametresRoute
+  '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,29 +73,59 @@ export interface FileRoutesByTo {
   '/catalogue': typeof CatalogueRoute
   '/leads': typeof LeadsRoute
   '/statistiques': typeof StatistiquesRoute
+  '/parametres': typeof AuthenticatedParametresRoute
+  '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/catalogue': typeof CatalogueRoute
   '/leads': typeof LeadsRoute
   '/statistiques': typeof StatistiquesRoute
+  '/_authenticated/parametres': typeof AuthenticatedParametresRoute
+  '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/catalogue' | '/leads' | '/statistiques'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/catalogue'
+    | '/leads'
+    | '/statistiques'
+    | '/parametres'
+    | '/api/sales/decision'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/catalogue' | '/leads' | '/statistiques'
-  id: '__root__' | '/' | '/auth' | '/catalogue' | '/leads' | '/statistiques'
+  to:
+    | '/'
+    | '/auth'
+    | '/catalogue'
+    | '/leads'
+    | '/statistiques'
+    | '/parametres'
+    | '/api/sales/decision'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/catalogue'
+    | '/leads'
+    | '/statistiques'
+    | '/_authenticated/parametres'
+    | '/api/sales/decision'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CatalogueRoute: typeof CatalogueRoute
   LeadsRoute: typeof LeadsRoute
   StatistiquesRoute: typeof StatistiquesRoute
+  ApiSalesDecisionRoute: typeof ApiSalesDecisionRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -116,15 +172,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatistiquesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/parametres': {
+      id: '/_authenticated/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof AuthenticatedParametresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/sales/decision': {
+      id: '/api/sales/decision'
+      path: '/api/sales/decision'
+      fullPath: '/api/sales/decision'
+      preLoaderRoute: typeof ApiSalesDecisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedParametresRoute: AuthenticatedParametresRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CatalogueRoute: CatalogueRoute,
   LeadsRoute: LeadsRoute,
   StatistiquesRoute: StatistiquesRoute,
+  ApiSalesDecisionRoute: ApiSalesDecisionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
