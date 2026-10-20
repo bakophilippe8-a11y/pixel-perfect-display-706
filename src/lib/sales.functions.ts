@@ -63,8 +63,8 @@ export const createSalesConversation = createServerFn({ method: 'POST' }).middle
 export const setSalesConversationStatus = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
   .inputValidator((input) => z.object({ id: z.string().uuid(), status: z.enum(['active','human','closed']) }).parse(input)).handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const result = await supabaseAdmin.from('sales_conversations').update({ status: data.status }).eq('id', data.id).eq('user_id', context.userId);
-    if (result.error) throw result.error;
+    const result = await supabaseAdmin.rpc('set_sales_mode', { owner_id: context.userId, conversation: data.id, next_status: data.status });
+    if (result.error || !result.data) throw new Error('Impossible de changer le mode de cette conversation. Un contact opposé aux messages ne peut pas être réactivé.');
     return { ok: true };
   });
 export const reviewSalesCampaign = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
