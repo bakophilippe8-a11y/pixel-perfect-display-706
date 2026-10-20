@@ -22,7 +22,7 @@ export async function salesDecision(request: Request, userId: string, conversati
   const stream = new ReadableStream({ async start(controller) {
     const event = (value: unknown) => controller.enqueue(encoder.encode(JSON.stringify(value) + '\n'));
     try {
-      const inserted = await db.from('sales_messages').insert({ user_id: userId, conversation_id: conversationId, direction: 'inbound', content: message });
+      const inserted = await db.from('sales_messages').insert({ user_id: userId, conversation_id: conversationId, direction: 'inbound', author: 'client', content: message });
       if (inserted.error) throw inserted.error;
       const history = await db.from('sales_messages').select('direction,content').eq('conversation_id', conversationId).eq('user_id', userId).order('created_at', { ascending: false }).limit(20);
       const products = await db.from('products').select('nom,prix,devise,argument_cle,lien_maketou').eq('user_id', userId).eq('statut', 'actif');
@@ -41,16 +41,9 @@ export async function salesDecision(request: Request, userId: string, conversati
       });
       for await (const chunk of result.textStream) event({ type: 'progress', value: chunk });
       const decision = decisionSchema.parse(await result.output);
-      if (decision.action === 'TRANSFER_TO_HUMAN') {
-        const update = await db.from('sales_conversations').update({ status: 'human' }).eq('id', conversationId).eq('user_id', userId);
-        if (update.error) throw update.error;
-      }
-      if (decision.action === 'GENERATE_AD_CAMPAIGN') {
-        const campaign = await db.from('sales_campaigns').insert({ user_id: userId, title: conversation.data.contact_name || 'Campagne', facebook_copy: decision.facebook_copy || '', voiceover_script: decision.voiceover_script || '' });
-        if (campaign.error) throw campaign.error;
-      }
-      const saved = await db.from('sales_messages').insert({ user_id: userId, conversation_id: conversationId, direction: decision.action === 'SEND_MESSAGE' ? 'outbound' : 'decision', content: decision.message || decision.reason, decision, status: 'internal' });
+      const saved = await db.rpc('commit_sales_decision', { owner_id: userId, conversation: conversationId, expected_epoch: conversation.data.automation_epoch, result: decision });
       if (saved.error) throw saved.error;
+      if (!saved.data) { event({ type: 'error', message: 'Réponse annulée : le mode de traitement a changé.', status: 409 }); return; }
       event({ type: 'done', decision });
     } catch (error) {
       const failure = error as { statusCode?: number; responseBody?: string; message?: string };
