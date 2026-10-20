@@ -188,6 +188,7 @@ export type Database = {
       }
       sales_conversations: {
         Row: {
+          automation_epoch: number
           channel: string
           contact_name: string
           contact_status: string
@@ -201,6 +202,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          automation_epoch?: number
           channel: string
           contact_name?: string
           contact_status?: string
@@ -214,6 +216,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          automation_epoch?: number
           channel?: string
           contact_name?: string
           contact_status?: string
@@ -301,6 +304,7 @@ export type Database = {
       }
       sales_messages: {
         Row: {
+          author: string
           content: string
           conversation_id: string
           created_at: string
@@ -313,6 +317,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          author?: string
           content: string
           conversation_id: string
           created_at?: string
@@ -325,6 +330,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          author?: string
           content?: string
           conversation_id?: string
           created_at?: string
@@ -360,6 +366,45 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      sales_product_views: {
+        Row: {
+          conversation_id: string
+          id: string
+          product_id: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          conversation_id: string
+          id?: string
+          product_id: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          conversation_id?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_product_views_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "sales_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_product_views_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       seller_connections: {
         Row: {
@@ -400,6 +445,19 @@ export type Database = {
     }
     Functions: {
       claim_sales_lock: { Args: { owner_id: string }; Returns: boolean }
+      commit_sales_decision: {
+        Args: {
+          conversation: string
+          expected_epoch: number
+          owner_id: string
+          result: Json
+        }
+        Returns: boolean
+      }
+      set_sales_mode: {
+        Args: { conversation: string; next_status: string; owner_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       agent_kind: "segmentation" | "matching" | "closing" | "suivi" | "manuel"
