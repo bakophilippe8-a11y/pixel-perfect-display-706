@@ -37,8 +37,8 @@ export const testSalesConnection = createServerFn({ method: 'POST' }).middleware
     const { decryptCredentials } = await import('./sales-crypto.server');
     const credentials = decryptCredentials(saved.data.credentials_ciphertext, context.userId);
     const response = data.channel === 'telegram'
-      ? await fetch(`https://api.telegram.org/bot${credentials.token}/getMe`, { method: 'POST' })
-      : await fetch(`https://graph.facebook.com/v25.0/${data.channel === 'meta' ? 'act_' : ''}${credentials.identifier}?fields=id`, { headers: { Authorization: `Bearer ${credentials.token}` } });
+      ? await fetch(`https://api.telegram.org/bot${credentials['token']}/getMe`, { method: 'POST' })
+      : await fetch(`https://graph.facebook.com/v25.0/${data.channel === 'meta' ? 'act_' : ''}${credentials['identifier']}?fields=id`, { headers: { Authorization: `Bearer ${credentials['token']}` } });
     const body = await response.json() as { ok?: boolean; error?: { message?: string }; description?: string };
     const ok = response.ok && body.ok !== false && !body.error;
     const message = ok ? null : data.channel === 'telegram' ? 'Telegram refuse cet accès. Vérifiez le jeton du bot.' : 'Meta refuse cet accès. Vérifiez le jeton, l’identifiant et les autorisations.';

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, it, expect } from 'vitest';
 import { canSendFreeWhatsApp, canAutomate, publicationAllowed } from './sales-rules';
 describe('Commercial safeguards', () => {
   const start = '2026-10-19T12:00:00Z';
