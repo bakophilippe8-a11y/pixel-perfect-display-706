@@ -28,7 +28,7 @@ function SettingsPage() {
     </section></div>;
 }
 type ConnectionData = Awaited<ReturnType<typeof getSalesSettings>>['connections'][number];
-function Connection({ channel, saved }: { channel: 'telegram' | 'whatsapp' | 'meta'; saved?: ConnectionData }) {
+function Connection({ channel, saved }: { channel: 'telegram' | 'whatsapp' | 'meta'; saved?: ConnectionData | undefined }) {
   const { lang } = useI18n(); const fr = lang === 'fr';
   const [token, setToken] = useState(''); const [identifier, setIdentifier] = useState('');
   const [appSecret, setAppSecret] = useState(''); const [verifyToken, setVerifyToken] = useState(''); const [busy, setBusy] = useState(false);
