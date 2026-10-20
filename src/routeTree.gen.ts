@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as LeadsRouteImport } from './routes/leads'
 import { Route as StatistiquesRouteImport } from './routes/statistiques'
+import { Route as AuthenticatedConversationsRouteImport } from './routes/_authenticated/conversations'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
 import { Route as ApiSalesDecisionRouteImport } from './routes/api/sales/decision'
 
@@ -47,6 +48,12 @@ const StatistiquesRoute = StatistiquesRouteImport.update({
   path: '/statistiques',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedConversationsRoute =
+  AuthenticatedConversationsRouteImport.update({
+    id: '/conversations',
+    path: '/conversations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
   id: '/parametres',
   path: '/parametres',
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/catalogue': typeof CatalogueRoute
   '/leads': typeof LeadsRoute
   '/statistiques': typeof StatistiquesRoute
+  '/conversations': typeof AuthenticatedConversationsRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
@@ -73,6 +81,7 @@ export interface FileRoutesByTo {
   '/catalogue': typeof CatalogueRoute
   '/leads': typeof LeadsRoute
   '/statistiques': typeof StatistiquesRoute
+  '/conversations': typeof AuthenticatedConversationsRoute
   '/parametres': typeof AuthenticatedParametresRoute
   '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
@@ -84,6 +93,7 @@ export interface FileRoutesById {
   '/catalogue': typeof CatalogueRoute
   '/leads': typeof LeadsRoute
   '/statistiques': typeof StatistiquesRoute
+  '/_authenticated/conversations': typeof AuthenticatedConversationsRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
   '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/catalogue'
     | '/leads'
     | '/statistiques'
+    | '/conversations'
     | '/parametres'
     | '/api/sales/decision'
   fileRoutesByTo: FileRoutesByTo
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/catalogue'
     | '/leads'
     | '/statistiques'
+    | '/conversations'
     | '/parametres'
     | '/api/sales/decision'
   id:
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
     | '/catalogue'
     | '/leads'
     | '/statistiques'
+    | '/_authenticated/conversations'
     | '/_authenticated/parametres'
     | '/api/sales/decision'
   fileRoutesById: FileRoutesById
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatistiquesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/conversations': {
+      id: '/_authenticated/conversations'
+      path: '/conversations'
+      fullPath: '/conversations'
+      preLoaderRoute: typeof AuthenticatedConversationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/parametres': {
       id: '/_authenticated/parametres'
       path: '/parametres'
@@ -190,10 +210,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedConversationsRoute: typeof AuthenticatedConversationsRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedConversationsRoute: AuthenticatedConversationsRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
 }
 
