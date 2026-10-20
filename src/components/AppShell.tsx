@@ -26,7 +26,7 @@ function LangToggle() {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -34,7 +34,9 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/", label: t("navOverview") },
     { to: "/catalogue", label: t("navCatalog") },
     { to: "/leads", label: t("navLeads") },
+    { to: "/conversations", label: lang === 'fr' ? 'Conversations' : 'Inbox' },
     { to: "/statistiques", label: t("navStats") },
+    { to: "/parametres", label: lang === 'fr' ? 'Paramètres API' : 'API settings' },
   ] as const;
 
   return (
