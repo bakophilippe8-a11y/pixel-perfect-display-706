@@ -17,6 +17,7 @@ import { Route as LeadsRouteImport } from './routes/leads'
 import { Route as StatistiquesRouteImport } from './routes/statistiques'
 import { Route as AuthenticatedConversationsRouteImport } from './routes/_authenticated/conversations'
 import { Route as AuthenticatedParametresRouteImport } from './routes/_authenticated/parametres'
+import { Route as AuthenticatedPubliciteFacebookRouteImport } from './routes/_authenticated/publicite-facebook'
 import { Route as ApiSalesDecisionRouteImport } from './routes/api/sales/decision'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,6 +60,12 @@ const AuthenticatedParametresRoute = AuthenticatedParametresRouteImport.update({
   path: '/parametres',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPubliciteFacebookRoute =
+  AuthenticatedPubliciteFacebookRouteImport.update({
+    id: '/publicite-facebook',
+    path: '/publicite-facebook',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiSalesDecisionRoute = ApiSalesDecisionRouteImport.update({
   id: '/api/sales/decision',
   path: '/api/sales/decision',
@@ -73,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/statistiques': typeof StatistiquesRoute
   '/conversations': typeof AuthenticatedConversationsRoute
   '/parametres': typeof AuthenticatedParametresRoute
+  '/publicite-facebook': typeof AuthenticatedPubliciteFacebookRoute
   '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
 export interface FileRoutesByTo {
@@ -83,6 +91,7 @@ export interface FileRoutesByTo {
   '/statistiques': typeof StatistiquesRoute
   '/conversations': typeof AuthenticatedConversationsRoute
   '/parametres': typeof AuthenticatedParametresRoute
+  '/publicite-facebook': typeof AuthenticatedPubliciteFacebookRoute
   '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
 export interface FileRoutesById {
@@ -95,6 +104,7 @@ export interface FileRoutesById {
   '/statistiques': typeof StatistiquesRoute
   '/_authenticated/conversations': typeof AuthenticatedConversationsRoute
   '/_authenticated/parametres': typeof AuthenticatedParametresRoute
+  '/_authenticated/publicite-facebook': typeof AuthenticatedPubliciteFacebookRoute
   '/api/sales/decision': typeof ApiSalesDecisionRoute
 }
 export interface FileRouteTypes {
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/statistiques'
     | '/conversations'
     | '/parametres'
+    | '/publicite-facebook'
     | '/api/sales/decision'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/statistiques'
     | '/conversations'
     | '/parametres'
+    | '/publicite-facebook'
     | '/api/sales/decision'
   id:
     | '__root__'
@@ -128,6 +140,7 @@ export interface FileRouteTypes {
     | '/statistiques'
     | '/_authenticated/conversations'
     | '/_authenticated/parametres'
+    | '/_authenticated/publicite-facebook'
     | '/api/sales/decision'
   fileRoutesById: FileRoutesById
 }
@@ -199,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedParametresRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/publicite-facebook': {
+      id: '/_authenticated/publicite-facebook'
+      path: '/publicite-facebook'
+      fullPath: '/publicite-facebook'
+      preLoaderRoute: typeof AuthenticatedPubliciteFacebookRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/sales/decision': {
       id: '/api/sales/decision'
       path: '/api/sales/decision'
@@ -212,11 +232,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedConversationsRoute: typeof AuthenticatedConversationsRoute
   AuthenticatedParametresRoute: typeof AuthenticatedParametresRoute
+  AuthenticatedPubliciteFacebookRoute: typeof AuthenticatedPubliciteFacebookRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedConversationsRoute: AuthenticatedConversationsRoute,
   AuthenticatedParametresRoute: AuthenticatedParametresRoute,
+  AuthenticatedPubliciteFacebookRoute: AuthenticatedPubliciteFacebookRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
