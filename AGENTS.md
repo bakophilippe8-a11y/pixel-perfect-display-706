@@ -12,3 +12,4 @@
 - Conversations use authenticated server functions and owner-scoped reads; credentials never leave the server, preserving seller isolation.
 - Conversation mode changes increment an automation epoch; AI decisions commit through a row-locked database function against that epoch, preventing stale replies after a handover.
 - Manual outbound messages record their human author and explicit delivery state; inactive external channels must never report a message as sent.
+- Facebook advertising uses the shared seller-owned campaign table for manual generation and automated proposals; edits revoke approval, and content approval never initiates publication or spending.

@@ -35,6 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/catalogue", label: t("navCatalog") },
     { to: "/leads", label: t("navLeads") },
     { to: "/conversations", label: lang === 'fr' ? 'Conversations' : 'Inbox' },
+    { to: "/publicite-facebook", label: lang === 'fr' ? 'Publicité Facebook' : 'Facebook advertising' },
     { to: "/statistiques", label: t("navStats") },
     { to: "/parametres", label: lang === 'fr' ? 'Paramètres API' : 'API settings' },
   ] as const;
@@ -71,7 +72,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             ) : null}
           </div>
 
-          <nav className="col-span-2 -mx-1 flex gap-1 overflow-x-auto px-1 pb-0.5 sm:order-2 sm:col-span-1 sm:mx-0 sm:overflow-visible sm:px-0">
+          <nav className="col-span-2 -mx-1 flex min-w-0 max-w-full gap-1 overflow-x-auto px-1 pb-0.5 sm:order-2 sm:col-span-1 sm:mx-0 sm:flex-wrap sm:px-0">
             {nav.map((item) => (
               <Link
                 key={item.to}
