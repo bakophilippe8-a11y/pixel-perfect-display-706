@@ -156,6 +156,9 @@ export type Database = {
       sales_campaigns: {
         Row: {
           approved_at: string | null
+          facebook_post_id: string | null
+          publish_error: string | null
+          published_at: string | null
           created_at: string
           facebook_copy: string
           id: string
@@ -163,9 +166,18 @@ export type Database = {
           title: string
           user_id: string
           voiceover_script: string
+          video_error: string | null
+          video_job_id: string | null
+          video_model: string | null
+          video_path: string | null
+          video_started_at: string | null
+          video_status: string
         }
         Insert: {
           approved_at?: string | null
+          facebook_post_id?: string | null
+          publish_error?: string | null
+          published_at?: string | null
           created_at?: string
           facebook_copy?: string
           id?: string
@@ -173,9 +185,18 @@ export type Database = {
           title: string
           user_id: string
           voiceover_script?: string
+          video_error?: string | null
+          video_job_id?: string | null
+          video_model?: string | null
+          video_path?: string | null
+          video_started_at?: string | null
+          video_status?: string
         }
         Update: {
           approved_at?: string | null
+          facebook_post_id?: string | null
+          publish_error?: string | null
+          published_at?: string | null
           created_at?: string
           facebook_copy?: string
           id?: string
@@ -183,6 +204,12 @@ export type Database = {
           title?: string
           user_id?: string
           voiceover_script?: string
+          video_error?: string | null
+          video_job_id?: string | null
+          video_model?: string | null
+          video_path?: string | null
+          video_started_at?: string | null
+          video_status?: string
         }
         Relationships: []
       }
@@ -234,6 +261,9 @@ export type Database = {
       sales_guidelines: {
         Row: {
           ai_paused: boolean
+          daily_ads_limit: number
+          daily_ai_limit: number
+          daily_video_limit: number
           human_conditions: string
           pause_reason: string
           sales_info: string
@@ -243,6 +273,9 @@ export type Database = {
         }
         Insert: {
           ai_paused?: boolean
+          daily_ads_limit?: number
+          daily_ai_limit?: number
+          daily_video_limit?: number
           human_conditions?: string
           pause_reason?: string
           sales_info?: string
@@ -252,6 +285,9 @@ export type Database = {
         }
         Update: {
           ai_paused?: boolean
+          daily_ads_limit?: number
+          daily_ai_limit?: number
+          daily_video_limit?: number
           human_conditions?: string
           pause_reason?: string
           sales_info?: string
@@ -452,6 +488,10 @@ export type Database = {
           owner_id: string
           result: Json
         }
+        Returns: boolean
+      }
+      register_sales_optout: {
+        Args: { conversation: string; message: string; owner_id: string }
         Returns: boolean
       }
       set_sales_mode: {

@@ -1,0 +1,46 @@
+name: Build APK
+
+on:
+  workflow_dispatch: {}
+  push:
+    tags: ['v*']
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '21' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Dépendances
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+      - name: Icônes Android
+        run: npx capacitor-assets generate --android --iconBackgroundColor '#14161c' --iconBackgroundColorDark '#14161c'
+      - name: Synchroniser le projet Android
+        run: npx cap sync android
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+      - name: Clé de signature (si fournie)
+        run: |
+          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.keystore"
+            echo "KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+            echo "SIGNED=1" >> "$GITHUB_ENV"
+          fi
+      - name: Compiler l'APK
+        working-directory: android
+        env:
+          APP_VERSION_CODE: ${{ github.run_number }}
+          APP_VERSION_NAME: 1.0.${{ github.run_number }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          if [ "$SIGNED" = "1" ]; then ./gradlew assembleRelease; else ./gradlew assembleDebug; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agents-ia-apk
+          path: android/app/build/outputs/apk/**/*.apk
